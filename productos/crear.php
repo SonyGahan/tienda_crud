@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once(__DIR__ . '/../config/database.php');
+require_once(__DIR__ . '/../config/config.php');
 
 // Verificar si el usuario está logueado
 if (!isset($_SESSION['usuario_id'])) {
@@ -334,7 +335,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                                         <!-- Botones -->
                                         <div class="d-flex justify-content-between">
-                                            <a href="listar.php" class="btn btn-outline-secondary">
+                                            <a href="<?php echo BASE_URL; ?>productos/listar.php" class="btn btn-outline-secondary">
                                                 <i class="fas fa-times me-2"></i>Cancelar
                                             </a>
                                             <button type="submit" class="btn btn-success">

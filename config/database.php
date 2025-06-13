@@ -74,17 +74,19 @@ function getDbConnection() {
  * @param array $params Parámetros para la consulta
  * @return array Resultados de la consulta
  */
-function executeQuery($query, $params = []) {
+function executeQuery($query, $params = [], $fetchAll = true) {
     try {
         $connection = getDbConnection();
         $stmt = $connection->prepare($query);
         $stmt->execute($params);
-        return $stmt->fetchAll();
+
+        return $fetchAll ? $stmt->fetchAll(PDO::FETCH_ASSOC) : $stmt->fetch(PDO::FETCH_ASSOC);
     } catch(PDOException $e) {
         error_log("Error en consulta: " . $e->getMessage());
         return false;
     }
 }
+
 
 /**
  * Función para ejecutar consultas INSERT, UPDATE, DELETE
