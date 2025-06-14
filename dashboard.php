@@ -38,7 +38,7 @@ include __DIR__ . '/includes/header.php';
         <!-- Sidebar -->
         <nav class="col-md-3 col-lg-2 d-md-block sidebar">
             <div class="sidebar-sticky pt-3 text-center text-white">
-                <img src="https://via.placeholder.com/80x80/ffffff/007bff?text=TC" class="rounded-circle mb-2" alt="Avatar">
+                <img src="./assets/img/logoPCchica.jpg" class="rounded-circle mb-2" alt="Avatar">
                 <h6>Bienvenido, <?php echo htmlspecialchars($_SESSION['usuario_nombre']); ?></h6>
                 <small class="text-light"><?php echo htmlspecialchars($_SESSION['usuario_email']); ?></small>
 

@@ -52,14 +52,14 @@ try {
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
-            <a class="navbar-brand" href="dashboard.php">
+            <a class="navbar-brand" href="../dashboard.php">
                 <i class="fas fa-store"></i> Tienda Productos
             </a>
             <div class="navbar-nav ms-auto">
-                <a class="nav-link" href="dashboard.php">
+                <a class="nav-link" href="../dashboard.php">
                     <i class="fas fa-home"></i> Dashboard
                 </a>
-                <a class="nav-link" href="productos.php">
+                <a class="nav-link" href="./listar.php">
                     <i class="fas fa-box"></i> Productos
                 </a>
                 <a class="nav-link" href="logout.php">
@@ -73,8 +73,8 @@ try {
         <!-- Breadcrumb -->
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="dashboard.php">Dashboard</a></li>
-                <li class="breadcrumb-item"><a href="productos.php">Productos</a></li>
+                <li class="breadcrumb-item"><a href="../dashboard.php">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="./listar.php">Productos</a></li>
                 <li class="breadcrumb-item active"><?php echo htmlspecialchars($producto['nombre']); ?></li>
             </ol>
         </nav>
@@ -83,7 +83,7 @@ try {
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2><i class="fas fa-eye"></i> Detalles del Producto</h2>
             <div>
-                <a href="productos.php" class="btn btn-secondary">
+                <a href="./listar.php" class="btn btn-secondary">
                     <i class="fas fa-arrow-left"></i> Volver
                 </a>
                 <a href="editar.php?id=<?php echo $producto['id']; ?>" class="btn btn-warning">
