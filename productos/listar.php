@@ -209,7 +209,7 @@ try {
                                         </thead>
                                         <tbody>
                                             <?php foreach ($productos as $producto): ?>
-                                                <tr>
+                                                <tr class="<?php echo !$producto['activo'] ? 'table-secondary' : ''; ?>">
                                                     <td>
                                                         <span class="fw-bold text-primary">#<?php echo $producto['id']; ?></span>
                                                     </td>
@@ -247,20 +247,47 @@ try {
                                                     </td>
                                                     <td>
                                                         <div class="btn-group btn-group-sm" role="group">
-                                                            <a href="ver.php?id=<?php echo $producto['id']; ?>"
-                                                                class="btn btn-outline-info" title="Ver detalles">
-                                                                <i class="fas fa-eye"></i>
-                                                            </a>
-                                                            <a href="editar.php?id=<?php echo $producto['id']; ?>"
-                                                                class="btn btn-outline-primary" title="Editar">
-                                                                <i class="fas fa-edit"></i>
-                                                            </a>
-                                                            <a href="eliminar.php?id=<?php echo $producto['id']; ?>"
-                                                                class="btn btn-outline-danger btn-delete"
-                                                                title="Eliminar"
-                                                                data-product-name="<?php echo htmlspecialchars($producto['nombre']); ?>">
-                                                                <i class="fas fa-trash"></i>
-                                                            </a>
+                                                            <?php if ($producto['activo']): ?>
+                                                                <a href="ver.php?id=<?php echo $producto['id']; ?>"
+                                                                    class="btn btn-outline-info"
+                                                                    title="Ver detalles">
+                                                                    <i class="fas fa-eye"></i>
+                                                                </a>
+                                                                <a href="editar.php?id=<?php echo $producto['id']; ?>"
+                                                                    class="btn btn-outline-primary"
+                                                                    title="Editar producto">
+                                                                    <i class="fas fa-edit"></i>
+                                                                </a>
+                                                            <?php else: ?>
+                                                                <button class="btn btn-outline-secondary disabled"
+                                                                    data-bs-toggle="tooltip"
+                                                                    data-bs-placement="top"
+                                                                    title="Este producto está inactivo y no puede visualizarse.">
+                                                                    <i class="fas fa-eye-slash"></i>
+                                                                </button>
+                                                                <button class="btn btn-outline-secondary disabled"
+                                                                    data-bs-toggle="tooltip"
+                                                                    data-bs-placement="top"
+                                                                    title="Este producto está inactivo y no puede editarse.">
+                                                                    <i class="fas fa-edit"></i>
+                                                                </button>
+                                                            <?php endif; ?>
+
+                                                            <?php if ($producto['activo']): ?>
+                                                                <a href="eliminar.php?id=<?php echo $producto['id']; ?>"
+                                                                    class="btn btn-outline-danger btn-delete"
+                                                                    title="Eliminar producto"
+                                                                    data-product-name="<?php echo htmlspecialchars($producto['nombre']); ?>">
+                                                                    <i class="fas fa-trash"></i>
+                                                                </a>
+                                                            <?php else: ?>
+                                                                <button class="btn btn-outline-secondary disabled"
+                                                                    data-bs-toggle="tooltip"
+                                                                    data-bs-placement="top"
+                                                                    title="Este producto está inactivo y no puede eliminarse.">
+                                                                    <i class="fas fa-trash-alt"></i>
+                                                                </button>
+                                                            <?php endif; ?>
                                                         </div>
                                                     </td>
                                                 </tr>
