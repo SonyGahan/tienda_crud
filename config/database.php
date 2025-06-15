@@ -4,11 +4,15 @@
  * Este archivo contiene los parámetros de conexión a MySQL
  */
 
+// Cargar el archivo .env
+require_once __DIR__ . '/env_loader.php';
+loadEnv(__DIR__ . '/../.env');
+
 // Configuración de la base de datos
-define('DB_HOST', 'localhost');        // Servidor de base de datos
-define('DB_USER', 'root');             // Usuario de MySQL (por defecto en XAMPP)
-define('DB_PASS', '1974Sony$');        // Contraseña (vacía por defecto en XAMPP)
-define('DB_NAME', 'tienda_productos'); // Nombre de la base de datos
+define('DB_HOST', $_ENV['DB_HOST']); // Servidor de base de datos
+define('DB_USER', $_ENV['DB_USER']); // Usuario de MySQL
+define('DB_PASS', $_ENV['DB_PASS']); // Contraseña
+define('DB_NAME', $_ENV['DB_NAME']); // Nombre de la base de datos
 
 /**
  * Clase para manejar la conexión a la base de datos
