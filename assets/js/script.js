@@ -258,7 +258,7 @@ function validateProductCode(event) {
     // Resetear validación personalizada
     event.target.setCustomValidity('');
 
-    // Aquí podrías agregar una validación AJAX para verificar unicidad
+    // Aquí se podría agregar una validación AJAX para verificar unicidad (VER COMO SE HACE, PENDIENTE)
     // checkProductCodeUnique(codigo);
 }
 

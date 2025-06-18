@@ -7,7 +7,7 @@
  */
 
 // Cargar el archivo .env desde el directorio raíz del proyecto
-$envPath = __DIR__ . '/../.env'; // Ajustar si .env está en otra ubicación
+$envPath = __DIR__ . '/../../.env'; // Ajustar si .env está en otra ubicación
 
 if (file_exists($envPath)) {
     $lines = file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
