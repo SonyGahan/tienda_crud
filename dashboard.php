@@ -134,7 +134,7 @@ include __DIR__ . '/includes/header.php';
                 <div class="col-lg-8">
                     <div class="card shadow mb-4">
                         <div class="card-header d-flex justify-content-between align-items-center">
-                            <h6 class="m-0 fw-bold text-primary">Productos Recientes</h6>
+                            <h6 class="m-0 fw-bold text-light">Productos Recientes</h6>
                             <a href="<?php echo BASE_URL; ?>productos/listar.php" class="btn btn-sm btn-primary">Ver Todos</a>
                         </div>
                         <div class="card-body">
@@ -188,7 +188,7 @@ include __DIR__ . '/includes/header.php';
                 <div class="col-lg-4">
                     <div class="card shadow mb-4">
                         <div class="card-header">
-                            <h6 class="m-0 fw-bold text-primary">Acciones Rápidas</h6>
+                            <h6 class="m-0 fw-bold text-light">Acciones Rápidas</h6>
                         </div>
                         <div class="card-body d-grid gap-2">
                             <a href="<?php echo BASE_URL; ?>productos/crear.php" class="btn btn-success"><i class="fas fa-plus me-2"></i>Agregar Producto</a>
@@ -200,7 +200,7 @@ include __DIR__ . '/includes/header.php';
 
                     <div class="card shadow">
                         <div class="card-header">
-                            <h6 class="m-0 fw-bold text-primary">Sistema</h6>
+                            <h6 class="m-0 fw-bold text-light">Sistema</h6>
                         </div>
                         <div class="card-body small text-muted">
                             <strong>Usuario:</strong> <?php echo htmlspecialchars($_SESSION['usuario_nombre']); ?><br>

@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once(__DIR__ . '/../config/database.php');
+require_once __DIR__ . '/../config/config.php';
 
 // Verificar si el usuario está logueado
 if (!isset($_SESSION['usuario_id'])) {
@@ -102,10 +103,15 @@ try {
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-body text-center">
-                        <?php if (!empty($producto['imagen']) && file_exists('uploads/' . $producto['imagen'])): ?>
-                            <img src="uploads/<?php echo htmlspecialchars($producto['imagen']); ?>"
+                        <?php
+                        $imgPath = BASE_URL . 'productos/uploads/' . $producto['imagen'];
+                        ?>
+
+                        <?php if (!empty($producto['imagen'])): ?>
+                            <img src="<?php echo $imgPath; ?>"
                                 alt="<?php echo htmlspecialchars($producto['nombre']); ?>"
-                                class="product-image">
+                                class="product-image mb-4"
+                                style="max-width: 300px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
                         <?php else: ?>
                             <div class="text-center p-5" style="background-color: #e9ecef; border-radius: 10px;">
                                 <i class="fas fa-image fa-5x text-muted"></i>

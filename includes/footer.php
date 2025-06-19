@@ -1,4 +1,10 @@
-            </main> <!-- Cierre de main que comenzó en header -->
+<?php
+if (!defined('APP_VERSION')) {
+    require_once __DIR__ . '/../config/config.php';
+}
+?>
+           
+           </main> <!-- Cierre de main que comenzó en header -->
             </div> <!-- Cierre de .row -->
             </div> <!-- Cierre de .container-fluid -->
 
