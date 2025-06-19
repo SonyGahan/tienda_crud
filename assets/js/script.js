@@ -361,6 +361,52 @@ function getToastTitle(type) {
     return titles[type] || 'Notificación';
 }
 
+
+// Mostrar/ocultar contraseña en login
+function togglePassword() {
+    const passwordInput = document.getElementById('password');
+    const toggleIcon = document.getElementById('toggleIcon');
+
+    if (!passwordInput || !toggleIcon) return;
+
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleIcon.classList.remove('fa-eye');
+        toggleIcon.classList.add('fa-eye-slash');
+    } else {
+        passwordInput.type = 'password';
+        toggleIcon.classList.remove('fa-eye-slash');
+        toggleIcon.classList.add('fa-eye');
+    }
+}
+
+// Cierre automático de alertas (5 segundos)
+document.addEventListener('DOMContentLoaded', function () {
+    setTimeout(function () {
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(function (alert) {
+            const bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
+            bsAlert.close();
+        });
+    }, 5000);
+});
+
+// Permitir enviar el formulario con Enter desde cualquier input
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                // Si está en un input y presiona Enter, dispara el submit
+                e.preventDefault(); // Evita comportamiento por defecto
+                form.submit();
+            }
+        });
+    }
+});
+
+
+
 /**
  * Utilidades adicionales
  */

@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Si no hay errores, procesar la imagen
         if (!isset($errores['imagen'])) {
-            $directorio_destino = '../uploads/productos/';
+            $directorio_destino = 'uploads/';
 
             // Crear directorio si no existe
             if (!is_dir($directorio_destino)) {
@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
 
             // Generar nombre único para la imagen
-            $nombre_imagen = 'producto_' . uniqid() . '.' . $extension;
+            $nombre_imagen = time() . '_' . uniqid() . '.' . $extension;
             $ruta_completa = $directorio_destino . $nombre_imagen;
 
             // Mover archivo
