@@ -61,7 +61,7 @@ logout.php
 1. Cloná el repositorio o descargá el ZIP:
 
 ```bash
-git clone https://github.com/tuusuario/mi-tienda.git
+git clone https://github.com/SonyGahan/mi-tienda.git
 ```
 
 2. Configurá la base de datos:

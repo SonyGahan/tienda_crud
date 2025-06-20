@@ -33,7 +33,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } elseif (strlen($datos['codigo_producto']) > 50) {
         $errores['codigo_producto'] = 'El código no puede tener más de 50 caracteres';
     } else {
-        // Verificar que el código no exista
         try {
             $stmt = $pdo->prepare("SELECT id FROM productos WHERE codigo_producto = ?");
             $stmt->execute([$datos['codigo_producto']]);
@@ -64,39 +63,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $extensiones_permitidas = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
         $tamaño_maximo = 5 * 1024 * 1024; // 5MB
 
-        // Validar extensión
         $extension = strtolower(pathinfo($archivo['name'], PATHINFO_EXTENSION));
         if (!in_array($extension, $extensiones_permitidas)) {
             $errores['imagen'] = 'Solo se permiten archivos JPG, JPEG, PNG, GIF y WEBP';
         }
 
-        // Validar tamaño
         if ($archivo['size'] > $tamaño_maximo) {
             $errores['imagen'] = 'La imagen no puede ser mayor a 5MB';
         }
 
-        // Si no hay errores, procesar la imagen
         if (!isset($errores['imagen'])) {
-            $directorio_destino = 'uploads/';
-
-            // Crear directorio si no existe
+            $directorio_destino = __DIR__ . '/../productos/uploads/';
             if (!is_dir($directorio_destino)) {
                 mkdir($directorio_destino, 0755, true);
             }
 
-            // Generar nombre único para la imagen
             $nombre_imagen = time() . '_' . uniqid() . '.' . $extension;
             $ruta_completa = $directorio_destino . $nombre_imagen;
 
-            // Mover archivo
             if (!move_uploaded_file($archivo['tmp_name'], $ruta_completa)) {
-                $errores['imagen'] = 'Error al subir la imagen';
+                $errores['imagen'] = 'Error al subir la imagen al servidor';
                 $nombre_imagen = null;
             }
         }
     }
 
-    // Si no hay errores, insertar en la base de datos
     if (empty($errores)) {
         try {
             $sql = "INSERT INTO productos (nombre, codigo_producto, descripcion, precio, imagen, activo) VALUES (?, ?, ?, ?, ?, ?)";
@@ -110,7 +101,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $datos['activo']
             ]);
 
-            // Redirigir con mensaje de éxito
             header("Location: listar.php?mensaje=" . urlencode("Producto creado exitosamente"));
             exit();
         } catch (PDOException $e) {
@@ -214,16 +204,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <?php endif; ?>
 
                     <!-- Formulario -->
-                    <div class="row">
-                        <div class="col-lg-8">
-                            <div class="card">
-                                <div class="card-header bg-primary text-white">
-                                    <h5 class="mb-0">
-                                        <i class="fas fa-info-circle me-2"></i>Información del Producto
-                                    </h5>
-                                </div>
-                                <div class="card-body">
-                                    <form method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                    <form method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="card">
+                                    <div class="card-header bg-primary text-white">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-info-circle me-2"></i>Información del Producto
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
                                         <div class="row">
                                             <!-- Nombre del producto -->
                                             <div class="col-md-8 mb-3">
@@ -332,103 +322,103 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                 <?php endif; ?>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
 
-                                        <!-- Botones -->
-                                        <div class="d-flex justify-content-between">
-                                            <a href="<?php echo BASE_URL; ?>productos/listar.php" class="btn btn-outline-secondary">
-                                                <i class="fas fa-times me-2"></i>Cancelar
-                                            </a>
-                                            <button type="submit" class="btn btn-success">
-                                                <i class="fas fa-save me-2"></i>Crear Producto
-                                            </button>
+                            <!-- Panel lateral - Imagen -->
+                            <div class="col-lg-4">
+                                <div class="card">
+                                    <div class="card-header bg-info text-white">
+                                        <h6 class="mb-0">
+                                            <i class="fas fa-image me-2"></i>Imagen del Producto
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <!-- Área de subida de archivo -->
+                                        <div class="file-upload-area" onclick="document.getElementById('imagen').click();">
+                                            <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                                            <h6 class="text-muted">Haz clic para seleccionar una imagen</h6>
+                                            <p class="text-muted small mb-0">
+                                                JPG, PNG, GIF, WEBP<br>
+                                                Máximo 5MB
+                                            </p>
                                         </div>
-                                    </form>
+
+                                        <input type="file"
+                                            class="form-control d-none <?php echo isset($errores['imagen']) ? 'is-invalid' : ''; ?>"
+                                            id="imagen"
+                                            name="imagen"
+                                            accept="image/*">
+
+                                        <?php if (isset($errores['imagen'])): ?>
+                                            <div class="invalid-feedback d-block mt-2">
+                                                <i class="fas fa-exclamation-triangle me-1"></i>
+                                                <?php echo $errores['imagen']; ?>
+                                            </div>
+                                        <?php endif; ?>
+
+                                        <!-- Preview de la imagen -->
+                                        <div id="preview-container" class="preview-container d-none">
+                                            <img id="preview-image" class="preview-image" alt="Preview">
+                                            <div class="mt-2">
+                                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="clearImage()">
+                                                    <i class="fas fa-trash me-1"></i>Quitar imagen
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Información adicional -->
+                                        <div class="mt-3">
+                                            <small class="text-muted">
+                                                <i class="fas fa-info-circle me-1"></i>
+                                                La imagen es opcional. Si no subes una imagen, se usará una imagen por defecto.
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Tips -->
+                                <div class="card mt-3">
+                                    <div class="card-header bg-warning text-dark">
+                                        <h6 class="mb-0">
+                                            <i class="fas fa-lightbulb me-2"></i>Consejos
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="list-unstyled mb-0 small">
+                                            <li class="mb-2">
+                                                <i class="fas fa-check text-success me-2"></i>
+                                                Usa nombres descriptivos y únicos
+                                            </li>
+                                            <li class="mb-2">
+                                                <i class="fas fa-check text-success me-2"></i>
+                                                El código debe ser único en el sistema
+                                            </li>
+                                            <li class="mb-2">
+                                                <i class="fas fa-check text-success me-2"></i>
+                                                Incluye una descripción detallada
+                                            </li>
+                                            <li class="mb-0">
+                                                <i class="fas fa-check text-success me-2"></i>
+                                                Verifica el precio antes de guardar
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Panel lateral - Imagen -->
-                        <div class="col-lg-4">
-                            <div class="card">
-                                <div class="card-header bg-info text-white">
-                                    <h6 class="mb-0">
-                                        <i class="fas fa-image me-2"></i>Imagen del Producto
-                                    </h6>
-                                </div>
-                                <div class="card-body">
-                                    <!-- Área de subida de archivo -->
-                                    <div class="file-upload-area" onclick="document.getElementById('imagen').click();">
-                                        <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
-                                        <h6 class="text-muted">Haz clic para seleccionar una imagen</h6>
-                                        <p class="text-muted small mb-0">
-                                            JPG, PNG, GIF, WEBP<br>
-                                            Máximo 5MB
-                                        </p>
-                                    </div>
-
-                                    <input type="file"
-                                        class="form-control d-none <?php echo isset($errores['imagen']) ? 'is-invalid' : ''; ?>"
-                                        id="imagen"
-                                        name="imagen"
-                                        accept="image/*">
-
-                                    <?php if (isset($errores['imagen'])): ?>
-                                        <div class="invalid-feedback d-block mt-2">
-                                            <i class="fas fa-exclamation-triangle me-1"></i>
-                                            <?php echo $errores['imagen']; ?>
-                                        </div>
-                                    <?php endif; ?>
-
-                                    <!-- Preview de la imagen -->
-                                    <div id="preview-container" class="preview-container d-none">
-                                        <img id="preview-image" class="preview-image" alt="Preview">
-                                        <div class="mt-2">
-                                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="clearImage()">
-                                                <i class="fas fa-trash me-1"></i>Quitar imagen
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <!-- Información adicional -->
-                                    <div class="mt-3">
-                                        <small class="text-muted">
-                                            <i class="fas fa-info-circle me-1"></i>
-                                            La imagen es opcional. Si no subes una imagen, se usará una imagen por defecto.
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Tips -->
-                            <div class="card mt-3">
-                                <div class="card-header bg-warning text-dark">
-                                    <h6 class="mb-0">
-                                        <i class="fas fa-lightbulb me-2"></i>Consejos
-                                    </h6>
-                                </div>
-                                <div class="card-body">
-                                    <ul class="list-unstyled mb-0 small">
-                                        <li class="mb-2">
-                                            <i class="fas fa-check text-success me-2"></i>
-                                            Usa nombres descriptivos y únicos
-                                        </li>
-                                        <li class="mb-2">
-                                            <i class="fas fa-check text-success me-2"></i>
-                                            El código debe ser único en el sistema
-                                        </li>
-                                        <li class="mb-2">
-                                            <i class="fas fa-check text-success me-2"></i>
-                                            Incluye una descripción detallada
-                                        </li>
-                                        <li class="mb-0">
-                                            <i class="fas fa-check text-success me-2"></i>
-                                            Verifica el precio antes de guardar
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
+                        <!-- Botones -->
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="<?php echo BASE_URL; ?>productos/listar.php" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-2"></i>Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save me-2"></i>Crear Producto
+                            </button>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -436,7 +426,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <script src="../assets/js/bootstrap.bundle.min.js"></script>
     <script src="../assets/js/script.js"></script>
-    
 </body>
 
 </html>
